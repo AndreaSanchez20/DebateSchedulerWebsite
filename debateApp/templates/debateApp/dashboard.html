@@ -1,0 +1,56 @@
+{% extends 'main.html' %}
+{% block content %}
+<!--Title-->
+<h1>Tournament Schedule Pal</h1>
+
+<div class="body-centered">
+<!--Combo box to select a tournament-->
+<div class="select-dropdown">
+<label for="tournament">Tournament:</label>
+<select name="tournament" id="tournament" required>
+<option value=""disabled selected hidden>Select a tournament</option>
+{% for item in tournaments %}
+<option value={{item.tournamentId }}> 
+{{item.name}}
+</option>
+{% endfor %}
+</select>
+<input type="submit" value="Submit" style="margin-left: 10px;" onclick="showRounds()">
+
+</div>
+<!--Table with tournament round details-->
+<div  id="tableRounds" class="table-centered">
+<div class="instruction">
+  <p>Round details! &#8628;</p>
+</div>
+<table>
+  <tr>
+      <th>Team</th>
+      <th>School</th>
+      <th>Position</th>
+      <th>versus</th>
+      <th>Team</th>
+      <th>School</th>
+      <th>Position</th>
+      <th>Results</th>
+  </tr>
+
+  <!--For loop to display all round information into table-->
+  {% for item in dashboard %}
+
+  <tr>
+      <td><a>{{item.team1}}</a></td>
+      <td>{{item.school1}}</td>
+      <td>{{item.position1}}</td>
+      <td>vs</td>
+      <td><a>{{item.team2}}</a></td>
+      <td>{{item.school2}}</td>
+      <td>{{item.position2}}</td>
+      <td>{{item.results}}</td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+</div>
+
+{% endblock content%}

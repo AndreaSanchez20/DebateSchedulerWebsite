@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+{% block content %}
+  
+         <!--Title-->
+         <h1>Next Round: 3 </h1>
+
+         <div class="left-column">
+             <h3>Team 1</h3>
+   <!-- This is the first team -->
+             <div id="team1" class="team-container">
+
+                 <!--Team 1 Details-->
+                <div class="team-centered">       
+                 
+                     <label for="school">School:</label>
+                     <input type="text" id="school1" name="school" value="{{ round.0.school1 }}" readonly/>
+                 
+                     <label for="members">Team Members:</label>
+                     <input type="text" id="members1" name="members" value="{{ round.0.members1 }}" readonly/>
+
+                     <label for="members">Position:</label>
+                     <input type="text" id="position1" name="members" value="{{ round.0.position1 }}" readonly/>
+                     
+                     <label for="members">Room:</label>
+                     <input type="text" id="room" name="members" value="{{ round.0.room }}" readonly/>
+                 </div>
+             </div>
+         </div>
+
+         <div class="right-column">
+             <h3>Team 2</h3>
+             <!-- This is the first team -->
+             <div id="team2" class="team-container">
+
+                 <!--Team 2 Details-->
+                 <div class="team-centered">
+                     
+                     <label for="school">School:</label>
+                     <input type="text" id="school2" name="school" value="{{ round.0.school2 }}" readonly/>
+                 
+                     <label for="members">Team Members:</label>
+                     <input type="text" id="members2" name="members" value="{{ round.0.members2 }}" readonly/>
+
+                     <label for="members">Position:</label>
+                     <input type="text" id="position2" name="members" value="{{ round.0.position2 }}" readonly/>
+                     
+                     <label for="members">Results:</label>
+                     <input type="text" id="results" name="members" value="{{ round.0.results }}" readonly/>
+              </div>
+          </div>  
+        </div>
+      </div>
+
+        <div id= "button-to-ballot" class="button-to-ballot">
+          <input type="submit" value="Go to Ballot" onclick="goToBallot()">
+        </div>
+{% endblock content %}

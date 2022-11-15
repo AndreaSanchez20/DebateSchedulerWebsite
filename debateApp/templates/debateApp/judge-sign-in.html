@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+{% block content%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#submit").click(function (e) {
+          var validate = Validate();
+          $("#message").html(validate);
+          judgeId = document.getElementById("username").value;
+          password = document.getElementById("password").value;
+          if (validate.length == 0) {
+            $.ajax({
+              type: "GET",
+              url:"http://127.0.0.1:8000/api/judgeLogin/"+judgeId +"/" +password ,dataType: "json",
+              success: function (result, status, xhr) {
+                if ($(result.auth)){
+                    $("#message").html("► Welcome");
+                    goToJudgeRound(judgeId);
+                }
+                else{
+                    $("#message").html("► Incorrect username and password \n for testing try user:judge1 password:248");
+                }
+
+              },
+              error: function (xhr, status, error) {
+                alert("Result: " + status +" " +error +" " +xhr.status + " " + xhr.statusText);
+              },
+            });
+          }
+        });
+
+        $(document).ajaxStart(function () {
+          $("img").show();
+        });
+
+        $(document).ajaxStop(function () {
+          $("img").hide();
+        });
+
+        function Validate() {
+          var errorMessage = "";
+          if ($("#username").val() == "" || $("#password").val() == "") {
+            errorMessage += "► Please input a username and password \n for testing try user:judge1 password:248";
+          }
+          return errorMessage;
+        }
+      });
+    </script>
+
+      <!--Title-->
+      <h1>Tournament Schedule Pal</h1>
+      <!--Sign in credentials-->
+
+      <div class="body-centered">
+        <h2>Judge Sign In</h2>
+            <div class="team-centered">
+                     
+             
+                {% csrf_token %}
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="username"/>
+            
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"placeholder="Enter password"/>
+                <input id= "submit" type="submit" value="Sign In" style="float: right; margin-top: 20px" value= "Login"/>
+                <label id="message"></label>
+            </div>
+
+            
+      </div>
+      
+      </div>
+</br>
+
+{% endblock content%}

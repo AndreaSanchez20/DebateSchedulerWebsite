@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+{% block content %}
+      <!--Title-->
+      <h1>Ballot</h1>
+
+      <div class="left-column">
+        <h2>Round 3</h2>
+
+        <div id="team1" class="team-container">
+          <!--Team 1 Details-->
+          <div class="select-dropdown">
+            <label for="tournament">Winning team:</label>
+
+            <select name="result" id="result" required>
+              <option value="" disabled selected hidden>Select a team</option>
+              <option value="affirmative">Affirmative</option>
+              <option value="negative">Negative</option>
+            </select>
+          </br>
+            <label>*This is a required field before submitting</label>
+            <div class="textarea-wrapper">
+              <label>Reasoning:</label>
+              <textarea
+                id="area-notes"
+                name="area-notes"
+                rows="4"
+                cols="50"
+                placeholder="Please explain why this team won here..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-to-ballot">
+      <a class="previous" onclick="goToBallot()" >&laquo; Previous</a>
+      <input
+        id="submit-ballot"
+        type="submit"
+        value="Submit"
+        style="margin-left: 10px"
+        onclick="goToDashboardUpdated();"
+      />
+    </div>
+
+    {% endblock content%}
+

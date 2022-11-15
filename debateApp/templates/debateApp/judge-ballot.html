@@ -1,0 +1,183 @@
+{% extends 'main.html' %}
+{% block content %}
+
+    <!--Ajax functionality to add notes-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#submit").click(function (e) {
+          var validate = Validate();
+          $("#message").html(validate);
+          tournamentId = document.URL.split("/")[4];
+          judgeId = document.URL.split("/")[5];
+          note = document.getElementById("area-notes").value;
+          if (validate.length == 0) {
+            $.ajax({
+              type: "GET",
+              url:"http://127.0.0.1:8000/api/judgeBallotNotes/" +tournamentId +"/" +judgeId +"/" +note,dataType: "json",
+              success: function (result, status, xhr) {
+                var table = $("<table><tr><th>Notes</th></tr>");
+                $(result).each(function (index) {
+                  table.append("<tr><td>" + this.note + "</td></tr>");
+                });
+
+                $("#note-list").html(table);
+              },
+              error: function (xhr, status, error) {
+                alert(
+                  "Result: " + status +" " +error +" " +xhr.status + " " + xhr.statusText);
+              },
+            });
+          }
+        });
+
+        $(document).ajaxStart(function () {
+          $("img").show();
+        });
+
+        $(document).ajaxStop(function () {
+          $("img").hide();
+        });
+
+        function Validate() {
+          var errorMessage = "";
+          if ($("#area-notes").val() == "") {
+            errorMessage += "► Type notes";
+          }
+          return errorMessage;
+        }
+      });
+    </script>
+
+
+
+      <!--Title-->
+      <h1>Ballot</h1>
+
+      <div class="left-column">
+        <h2>Round 3</h2>
+        <h3>Team 1</h3>
+        <!-- This is the first team -->
+        <div id="team1" class="team-container">
+          <!--Team 1 Details-->
+          <div class="team-centered">
+            <label for="tournament">Tournament:</label>
+            <input
+              type="text"
+              id="school"
+              name="school1"
+              value="{{ round.0.school1 }}"
+              readonly
+            />
+
+            <label for="members">Team Members:</label>
+            <input
+              type="text"
+              id="members"
+              name="members1"
+              value="{{ round.0.members1 }}"
+              readonly
+            />
+
+            <label for="position1">Position:</label>
+            <input
+              type="text"
+              id="position1"
+              name="position1"
+              value="{{ round.0.position1 }}"
+              readonly
+            />
+
+            <label for="room">Room:</label>
+            <input
+              type="text"
+              id="room"
+              name="room"
+              value="{{ round.0.room }}"
+              readonly
+            />
+
+            <p><label>Notes:</label></p>
+            <textarea
+              id="area-notes"
+              name="area-notes"
+              rows="4"
+              cols="50"
+              placeholder="Add round notes here..."
+            ></textarea>
+            <input
+              type="submit"
+              value="Add Note"
+              style="margin-left: 10px"
+              id="submit"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <h2>Round 3</h2>
+        <h3>Team 2</h3>
+        <!-- This is the first team -->
+        <div id="team2" class="team-container">
+          <!--Team 2 Details-->
+          <div class="team-centered">
+            <label for="school2">School:</label>
+            <input
+              type="text"
+              id="school2"
+              name="school2"
+              value="{{ round.0.school2 }}"
+              readonly
+            />
+
+            <label for="members2">Team Members:</label>
+            <input
+              type="text"
+              id="members2"
+              name="members2"
+              value="{{ round.0.members2 }}"
+              readonly
+            />
+
+            <label for="position2">Position:</label>
+            <input
+              type="text"
+              id="position2"
+              name="position2"
+              value="{{ round.0.position2 }}"
+              readonly
+            />
+
+            <label for="results">Results:</label>
+            <input
+              type="text"
+              id="results"
+              name="results"
+              value="{{ round.0.results }}"
+              readonly
+            />
+
+            <p><label>Notes Added:</label></p>
+            <div id="note-list">
+              
+              <table>
+                <tr><th>Notes:</th></tr>
+                {% for item in notes %}
+                <tr>
+                  <td>{{item.note}}</td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="button-to-ballot">
+      <!--<a class="previous" onclick="goToJudgeRound()" ;>&laquo; Previous</a>-->
+      <a class="next" onclick="goToBallot2();">Next &raquo;</a>
+    </div>
+
+    {% endblock content %}
+

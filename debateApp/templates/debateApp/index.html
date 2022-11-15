@@ -1,0 +1,40 @@
+      {% extends 'main.html' %}
+      {% block content %}
+      <!--Title-->
+      <!--National Speech and Debate image webiste: https://www.speechanddebate.org/-->
+      <h1>Tournament Schedule Pal</h1>
+      <div class="debate-image">
+        <img src="https://www.speechanddebate.org/wp-content/uploads/NSDA-Logo-RGB-REVERSED.png" alt="National Speech and Debate Association image"/>
+      </div>
+      <!--Combo box to select user role-->
+
+      <div class="body-centered">
+          <div id= "user-role" class="select-dropdown">
+              <label for="role-select">I'm a : </label>
+              <select name="role" id="role-select" required>
+                  <option value=""disabled selected hidden>- Select a role -</option>
+                  <option value="student">Student</option>
+                  <option value="judge">Judge</option>
+              </select>
+          </div>
+          </br>
+
+          <!--Combo box to select a tournament-->
+          <div class="select-dropdown" >
+              <label for="tournament">Tournament : </label>
+              <select name="tournament" id="tournamentCB" required>
+                  <option value="x" disabled selected hidden>- Select a tournament - </option>
+                  {% for item in tournaments %}
+                        <option value={{item.tournamentId}}>{{item.name}}</option>
+                  {% endfor %}
+
+              </select>
+              <input type="submit" value="Submit" style="margin-left: 10px;" onclick="SelectRedirect();">
+
+          </div>
+
+      </div>
+
+      
+    </div>
+  {% endblock content %}
