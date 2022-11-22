@@ -3,9 +3,9 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import RoundSerializer
-from .serializers import TournamentSerializer, NotesSerializer, LoginAuthSerializer
-from debateApp.models import Round
-from debateApp.models import Tournament, Note, LoginAuth
+from .serializers import TournamentSerializer, LoginAuthSerializer, NoteSerializer
+from debateApp.models import Round2,Note
+from debateApp.models import Tournament, LoginAuth
 
 #API data as dictionaries
 userList = [
@@ -26,9 +26,10 @@ noteList = [
             'note': ''
         }]
 
+
 roundsList = [
         {
-            'team1':'team1a',
+            'team1':'team1aX',
             'school1':'school1a',
             'members1':'Andrea Sanchez, Paulina Hurtado',
             'position1': 'affirmative',
@@ -38,8 +39,9 @@ roundsList = [
             'position2': 'negative',
             'room': '215B',
             'results': 'tbd',
-            'tournamentId':'1',
-            'judgeId': 'judge1'
+            'tournamentId':'a691ad35-82e9-40a3-b635-632e5efb046e',
+            'judgeId': 'judge1',
+            'roundId':'r1',
         },
         {
             'team1':'team1b',
@@ -52,8 +54,9 @@ roundsList = [
             'position2': 'negative',
             'room': '2',
             'results': 'tbd',
-            'tournamentId':'1',
-            'judgeId': 'judge2'
+            'tournamentId':'a691ad35-82e9-40a3-b635-632e5efb046e',
+            'judgeId': 'judge2',
+            'roundId':'r1',
         },
         {
             'team1':'team3a',
@@ -67,7 +70,8 @@ roundsList = [
             'room': '3',
             'results': 'tbd',
             'tournamentId':'2',
-            'judgeId': 'judge1'
+            'judgeId': 'judge1',
+            'roundId':'r1',
         },
         {
             'team1':'team3b',
@@ -81,9 +85,11 @@ roundsList = [
             'room': '4',
             'results': 'tbd',
             'tournamentId':'2',
-            'judgeId': 'judge2'
+            'judgeId': 'judge2',
+            'roundId':'r1',
         }
     ]
+    
 
 #Test API
 @api_view(['GET'])
@@ -103,7 +109,8 @@ def getTournament(request):
     #tournament = Tournament.objects.all()
     #pass serialized data. books data converted from python to json
 
-    tournamentList = [
+    tournamentList = Tournament.objects.all()
+    """tournamentList = [
     {
         'tournamentId':'1',
         'name': 'Lincoln Douglas'
@@ -113,6 +120,7 @@ def getTournament(request):
         'name': 'Harvard'
     },
     ]
+    """
     #serialize data to send
     serializer= TournamentSerializer(tournamentList, many=True)
     #returns serialized data
@@ -134,13 +142,19 @@ def getDashboard(request, tournamentId):
 
 @api_view(['GET'])
 def getJudgeRound(request, tournamentId, judgeId):
+
+    
     filteredRounds=[]
+    roundsList = Round2.objects.all().values()
+    #print(roundsList)
     for item in roundsList:
+        #round = Round.objects.get(id=tournamentId)
         if item['tournamentId']==tournamentId and item['judgeId']==judgeId:
             filteredRounds.append(item)
-
+    #pass serialized data. books data converted from python to json
     serializer= RoundSerializer(filteredRounds, many=True)
     return Response(serializer.data)
+    
 
 @api_view(['POST'])
 def getRoundsUpdated(request, tournamentId,judgeId, result):
@@ -152,20 +166,11 @@ def getRoundsUpdated(request, tournamentId,judgeId, result):
 
 @api_view(['GET'])
 def getNote(request, tournamentId, judgeId):
-    currentNotes=[]
-    item =	{'tournamentId':"",
-            'judgeId': "",
-            'note': ""
-            }
-    currentNotes.append(item)
 
-    for item in noteList:
-        if item['tournamentId']==tournamentId and item['judgeId']==judgeId:
-            currentNotes.append(item)
+    noteList = Note.objects.filter(judgeId=judgeId,tournamentId=tournamentId).values()
 
-    #filteredRounds = roundsList.object.filter(id=tournamentId)
-    print(currentNotes)
-    serializer= NotesSerializer(currentNotes, many=True)
+    print(noteList)
+    serializer= NoteSerializer(noteList, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -176,15 +181,14 @@ def addNote(request, tournamentId, judgeId,note):
             'note': note
             }
     currentNotes.append(item)
-    for i in noteList:
-        print("in for")
-        print(noteList)
-        if i['tournamentId']==tournamentId and i['judgeId']==judgeId:
-            currentNotes.append(i)
-    noteList.append(item)
-    print("out for")
+    newNote = Note.objects.create(tournamentId=tournamentId,
+            judgeId= judgeId,
+            note= note)
+
+    currentNotes = Note.objects.filter(judgeId=judgeId,tournamentId=tournamentId).values()
+
     print(currentNotes)
-    serializer= NotesSerializer(currentNotes, many=True)
+    serializer= NoteSerializer(currentNotes, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

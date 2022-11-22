@@ -11,14 +11,25 @@ import json
 #from django.template import loader
 # Create your views here.
 
+
 def index(request):
     #calls the API that returns tournaments data 
     response = requests.get("http://127.0.0.1:8000/api/tournament")
     #loads data as JSON
     tournamentListAPI = json.loads(response.text)
+    #params = dict(
+        #origin='Chicago,IL',
+        #destination='Los+Angeles,CA',
+        #waypoints='Joplin,MO|Oklahoma+City,OK',
+        #sensor='false'
+    #)
+    responseQuote = requests.get('https://favqs.com/api/qotd')
+    quoteAPI = json.loads(responseQuote.text) # Check the JSON Response Content documentation below
+
     #sends data in context
-    context ={'tournaments':tournamentListAPI}
+    context ={'tournaments':tournamentListAPI, 'quote':quoteAPI}
     print(context)
+
     return render(request, 'debateApp/index.html', context)
 
 def dashboard(request):
