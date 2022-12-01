@@ -10,19 +10,21 @@ import json
 #from django.http import HttpResponse
 #from django.template import loader
 # Create your views here.
-
+from pathlib import Path
+baseURL= ""#request.build_absolute_uri() 
+#request.META['HTTP_HOST'] #request.get_full_path() #getCurrent()
+#BASE_DIR = Path(__file__).resolve().parent.parent
+#request.build_absolute_uri()
 
 def index(request):
     #calls the API that returns tournaments data 
-    response = requests.get("http://127.0.0.1:8000/api/tournament")
+    print(request.META['HTTP_HOST'])
+    print("HOST:")
+    print(request.build_absolute_uri())
+    response = requests.get(request.build_absolute_uri("/api/tournament"))
     #loads data as JSON
     tournamentListAPI = json.loads(response.text)
-    #params = dict(
-        #origin='Chicago,IL',
-        #destination='Los+Angeles,CA',
-        #waypoints='Joplin,MO|Oklahoma+City,OK',
-        #sensor='false'
-    #)
+
     responseQuote = requests.get('https://favqs.com/api/qotd')
     quoteAPI = json.loads(responseQuote.text) # Check the JSON Response Content documentation below
 
@@ -33,7 +35,7 @@ def index(request):
     return render(request, 'debateApp/index.html', context)
 
 def dashboard(request):
-    response = requests.get("http://127.0.0.1:8000/api/tournament")
+    response = requests.get(request.build_absolute_uri("/api/tournament"))
     tournamentListAPI = json.loads(response.text)
     
     context ={'tournaments':tournamentListAPI, 'dashboard':None}
@@ -41,10 +43,10 @@ def dashboard(request):
 
 
 def dashboardbyTournament(request, tournamentId):
-    response = requests.get("http://127.0.0.1:8000/api/tournament")
+    response = requests.get(request.build_absolute_uri("/api/tournament"))
     tournamentListAPI = json.loads(response.text)
     
-    response = requests.get("http://127.0.0.1:8000/api/dashboard/"+tournamentId)
+    response = requests.get(request.build_absolute_uri("/api/dashboard/"+tournamentId))
     dashboardListAPI = json.loads(response.text)
     
     context ={'tournaments':tournamentListAPI, 'dashboard':dashboardListAPI}
@@ -52,7 +54,7 @@ def dashboardbyTournament(request, tournamentId):
 
 def dashboardUpdated(request, tournamentId,judgeId, result):
     #updates dashboard
-    response = requests.post("http://127.0.0.1:8000/api/dashboardUpdate/"+tournamentId+ "/" + judgeId + "/" +result)
+    response = requests.post(request.build_absolute_uri("/api/dashboardUpdate/"+tournamentId+ "/" + judgeId + "/" +result))
     #loads and displays updated dashboard
 
     return dashboardbyTournament(request, tournamentId)
@@ -63,10 +65,10 @@ def about(request):
     return render(request, 'debateApp/about.html', context)
 
 def judgeBallot(request,tournamentId, judgeId):
-    response = requests.get("http://127.0.0.1:8000/api/judgeRound/" + tournamentId + '/'+ judgeId  )
+    response = requests.get(request.build_absolute_uri("/api/judgeRound/" + tournamentId + '/'+ judgeId  ))
     tournamentListAPI = json.loads(response.text)
     #TODO: add prev notes api
-    response = requests.get("http://127.0.0.1:8000/api/judgeBallotNotes/" + tournamentId + '/'+ judgeId )
+    response = requests.get(request.build_absolute_uri("/api/judgeBallotNotes/" + tournamentId + '/'+ judgeId ))
 
     noteListAPI = json.loads(response.text)
 
@@ -78,24 +80,24 @@ def judgeBallot2(request,tournamentId, judgeId):
     return render(request, 'debateApp/judge-ballot-2.html', context)
 
 def judgeRound(request, tournamentId, judgeId):
-    response = requests.get("http://127.0.0.1:8000/api/judgeRound/" + tournamentId + '/'+ judgeId  )
+    response = requests.get(request.build_absolute_uri("/api/judgeRound/" + tournamentId + '/'+ judgeId  ))
     tournamentListAPI = json.loads(response.text)
     context ={'round':tournamentListAPI}
     print(context)
     return render(request, 'debateApp/judge-round.html', context)
 
 def studentRound(request, tournamentId):
-    response = requests.get("http://127.0.0.1:8000/api/judgeRound/" + tournamentId  )
+    response = requests.get(request.build_absolute_uri("/api/judgeRound/" + tournamentId  ))
     tournamentListAPI = json.loads(response.text)
     context ={'round':tournamentListAPI}
     print(context)
     return render(request, 'debateApp/student-round.html', context)
 
 def addNote(request, tournamentId, judgeId, note):
-    response = requests.get("http://127.0.0.1:8000/api/judgeBallotNotes/" + tournamentId + '/'+ judgeId +"/"+note )
+    response = requests.get(request.build_absolute_uri("/api/judgeBallotNotes/" + tournamentId + '/'+ judgeId +"/"+note ))
     notesListAPI = json.loads(response.text)
 
-    response = requests.get("http://127.0.0.1:8000/api/judgeRound/" + tournamentId + '/'+ judgeId  )
+    response = requests.get(request.build_absolute_uri("/api/judgeRound/" + tournamentId + '/'+ judgeId  ))
     tournamentListAPI = json.loads(response.text)
     context ={'round':tournamentListAPI, 'notes': notesListAPI}
     #print(context)

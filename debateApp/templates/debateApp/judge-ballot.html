@@ -14,7 +14,7 @@
           if (validate.length == 0) {
             $.ajax({
               type: "GET",
-              url:"http://127.0.0.1:8000/api/judgeBallotNotes/" +tournamentId +"/" +judgeId +"/" +note,dataType: "json",
+              url:window.location.protocol + "//" + window.location.host + "/api/judgeBallotNotes/" +tournamentId +"/" +judgeId +"/" +note,dataType: "json",
               success: function (result, status, xhr) {
                 var table = $("<table><tr><th>Notes</th></tr>");
                 $(result).each(function (index) {

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-)xpxma@=9-1()w!n_d25o^0na899dz$(^kd35m$%imw%#-@*ew
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["sanch246.pythonanywhere.com", "127.0.0.1"]
 
 
 # Application definition
@@ -126,6 +126,15 @@ CORS_ALLOW_ALL_ORIGINS = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Add these new lines
+#STATICFILES_DIRS = (
+    #os.path.join(BASE_DIR, 'static'),
+#    "/home/sanch246/DebateSchedulerWebsite/staticfiles",
+
+#)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
