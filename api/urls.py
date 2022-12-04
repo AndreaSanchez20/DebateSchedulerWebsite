@@ -12,4 +12,5 @@ urlpatterns = [
     path('judgeBallotNotes/<str:tournamentId>/<str:judgeId>/<str:note>', views.addNote),
     path('dashboardUpdate/<str:tournamentId>/<str:judgeId>/<str:result>', views.getRoundsUpdated),
     path('judgeLogin/<str:judgeId>/<str:password>', views.getLogin),
+    path('judgeBallotNotesDelete/<str:tournamentId>/<str:judgeId>/<str:noteId>', views.deleteNote),
 ]

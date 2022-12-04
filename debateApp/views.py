@@ -109,3 +109,15 @@ def judgeSignIn(request, tournamentId):
 #Loading: consists of finding the template for a given indentifier and preprocessing it, usually compiling it to an in-memory representation
 #rendering: interpolating the template with context data and returning the resulting string. replaces vars wit their values which are looked up in the context and executes tags. everyhting else is output as is
 #template system uses dot-lookup syntax to access var attributes
+
+def deleteNote(request, tournamentId, judgeId,noteId):
+
+    response = requests.get(request.build_absolute_uri("/api/judgeBallotNotesDelete/" + tournamentId + '/'+ judgeId +"/"+noteId ))
+    print("RESPONSE")
+    notesListAPI = json.loads(response.text)
+
+    response = requests.get(request.build_absolute_uri("/api/judgeRound/" + tournamentId + '/'+ judgeId  ))
+    tournamentListAPI = json.loads(response.text)
+    context ={'round':tournamentListAPI, 'notes': notesListAPI}
+
+    return render(request,'debateApp/judge-ballot.html', context)

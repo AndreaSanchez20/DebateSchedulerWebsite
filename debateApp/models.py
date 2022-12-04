@@ -36,7 +36,7 @@ class Round2(models.Model):
 
 
 class Note(models.Model):
-    noteId = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    noteId = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=True)
     judgeId = models.CharField(max_length =50,null=False, blank=False)
     tournamentId = models.CharField(max_length =50,null=False, blank=False)
     note = models.CharField(max_length =250,null=False, blank=False)

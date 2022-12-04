@@ -204,3 +204,23 @@ def getLogin(request, judgeId, password):
     print(result)
     serializer= LoginAuthSerializer(result)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def deleteNote(request, tournamentId, judgeId,noteId):
+    currentNotes=[]
+
+    note = Note.objects.get(noteId=noteId)
+    print("NOTEID: " + noteId)
+    note.delete()
+
+    """currentNotes.append(item)
+    newNote = Note.objects.create(tournamentId=tournamentId,
+            judgeId= judgeId,
+            note= note)
+    """
+
+    currentNotes = Note.objects.filter(judgeId=judgeId,tournamentId=tournamentId).values()
+
+    print(currentNotes)
+    serializer= NoteSerializer(currentNotes, many=True)
+    return Response(serializer.data)
