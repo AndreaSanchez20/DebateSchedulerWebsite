@@ -6,13 +6,10 @@ from http.client import HTTPResponse
 from django.http import HttpResponse
 
 import json
-
-#from django.http import HttpResponse
-#from django.template import loader
 # Create your views here.
 from pathlib import Path
-baseURL= ""#request.build_absolute_uri() 
-#request.META['HTTP_HOST'] #request.get_full_path() #getCurrent()
+
+#To find absolute path:
 #BASE_DIR = Path(__file__).resolve().parent.parent
 #request.build_absolute_uri()
 
@@ -110,6 +107,8 @@ def judgeSignIn(request, tournamentId):
 #rendering: interpolating the template with context data and returning the resulting string. replaces vars wit their values which are looked up in the context and executes tags. everyhting else is output as is
 #template system uses dot-lookup syntax to access var attributes
 
+
+#Delete note view loads the current data (like addNote()) and bring only the current notes after calling the api that delete notes
 def deleteNote(request, tournamentId, judgeId,noteId):
 
     response = requests.get(request.build_absolute_uri("/api/judgeBallotNotesDelete/" + tournamentId + '/'+ judgeId +"/"+noteId ))

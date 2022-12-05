@@ -31,7 +31,7 @@
           }
         });
 
-        //deleteNote
+        //Ajax ro deleteNote
         $('#tbody').on('click', '#deleteNote', function () {
         //$("#deleteNote").click(function (e) {
           tournamentId = document.URL.split("/")[4];
@@ -183,7 +183,7 @@
               value="{{ round.0.results }}"
               readonly
             />
-
+            <!-- Notes added table-->
             <p><label>Notes Added:</label></p>
             <div id="note-list">
               

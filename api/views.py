@@ -180,14 +180,16 @@ def addNote(request, tournamentId, judgeId,note):
             'judgeId': judgeId,
             'note': note
             }
+    #adds item on currentNotes list.
     currentNotes.append(item)
     newNote = Note.objects.create(tournamentId=tournamentId,
             judgeId= judgeId,
             note= note)
 
+    #fetches all current notes based on judge abd trournament id
     currentNotes = Note.objects.filter(judgeId=judgeId,tournamentId=tournamentId).values()
 
-    print(currentNotes)
+    print(currentNotes) #debugging
     serializer= NoteSerializer(currentNotes, many=True)
     return Response(serializer.data)
 
@@ -197,6 +199,7 @@ def getLogin(request, judgeId, password):
             'auth': False
             }
 
+    #check if password and judgeId is on the list and change auth property if so
     for item in userList:
         if item['password']==password and item['judgeId']==judgeId:
             result['auth'] = True
@@ -210,17 +213,12 @@ def deleteNote(request, tournamentId, judgeId,noteId):
     currentNotes=[]
 
     note = Note.objects.get(noteId=noteId)
+    #debugging
     print("NOTEID: " + noteId)
-    note.delete()
+    note.delete() #deletes object
 
-    """currentNotes.append(item)
-    newNote = Note.objects.create(tournamentId=tournamentId,
-            judgeId= judgeId,
-            note= note)
-    """
-
+    #brings notes based on the signed in judge and trounament chosen
     currentNotes = Note.objects.filter(judgeId=judgeId,tournamentId=tournamentId).values()
 
-    print(currentNotes)
     serializer= NoteSerializer(currentNotes, many=True)
     return Response(serializer.data)
